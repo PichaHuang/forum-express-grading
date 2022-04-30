@@ -49,17 +49,19 @@ const userController = {
       include: [
         Comment,
         { model: Comment, include: Restaurant }
-      ]
+      ],
+      raw: true,
+      nest: true
     })
       .then(user => {
         let commentLen = 0
         if (user) {
-          if (user.toJSON().Comments) commentLen = user.toJSON().Comments.length
-          isLoggerId = (LoggerId === user.toJSON().id) ? LoggerId : null
+          if (user.Comments) commentLen = user.Comments.length
+          isLoggerId = (LoggerId === user.id) ? LoggerId : null
         }
         res.render('users/profile', {
-          user: user.toJSON(),
-          commentCounts: commentLen, /*user.toJSON().Comments.length */
+          user,
+          commentCounts: commentLen,
           isLoggerId
         }
         )
